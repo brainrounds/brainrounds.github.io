@@ -157,9 +157,7 @@ function buildExitControl(onExit: () => void, signal: AbortSignal): HTMLElement 
     clearTimeout(timer);
   };
 
-  for (const event of ['pointerdown'] as const) {
-    control.addEventListener(event, begin, { signal });
-  }
+  control.addEventListener('pointerdown', begin, { signal });
   for (const event of ['pointerup', 'pointerleave', 'pointercancel'] as const) {
     control.addEventListener(event, cancel, { signal });
   }

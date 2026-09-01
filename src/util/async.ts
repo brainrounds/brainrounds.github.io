@@ -50,17 +50,6 @@ export function wait(ms: number, signal?: AbortSignal): Promise<void> {
   });
 }
 
-/** A promise that never settles on its own — only when `signal` aborts. */
-export function untilAborted(signal: AbortSignal): Promise<void> {
-  return new Promise((resolve) => {
-    if (signal.aborted) {
-      resolve();
-      return;
-    }
-    signal.addEventListener('abort', () => resolve(), { once: true });
-  });
-}
-
 export interface Deferred<T> {
   promise: Promise<T>;
   resolve: (value: T) => void;
