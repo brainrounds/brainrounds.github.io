@@ -1,0 +1,652 @@
+/*
+ * Built for a tablet held by someone with cognitive decline: large type, big
+ * targets, plenty of contrast, and nothing decorative competing for attention.
+ * Dark-on-light throughout, which reads more easily than the reverse in a
+ * normally lit room.
+ */
+
+:root {
+  --paper: #f7f4ef;
+  --card: #ffffff;
+  --ink: #1f2421;
+  --ink-soft: #5a615c;
+  --line: #ded7cc;
+  --accent: #2d7d6f;
+  --accent-soft: #e4f0ed;
+  --warm: #db9a16;
+
+  --gap: 16px;
+  --radius: 18px;
+  --tap: 72px;
+
+  --text: 20px;
+  --text-lg: 28px;
+  --text-xl: 40px;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: var(--text);
+  line-height: 1.4;
+
+  /* A stray drag must never pull-to-refresh: that reloads the page and
+     destroys a session in progress. */
+  overscroll-behavior: none;
+  /* No double-tap zoom, no text selection, no long-press magnifier. */
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 2px solid var(--line);
+  background: var(--card);
+  border-radius: var(--radius);
+  min-height: var(--tap);
+  padding: 12px 20px;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+button:focus-visible {
+  outline: 4px solid var(--accent);
+  outline-offset: 3px;
+}
+
+#app {
+  min-height: 100%;
+}
+
+/* ---------------------------------------------------------------- setup */
+
+.setup {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.setup-header {
+  padding: 8px 4px 0;
+}
+
+.setup-title {
+  font-size: var(--text-xl);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.setup-sub {
+  margin: 4px 0 0;
+  color: var(--ink-soft);
+}
+
+.setup-last {
+  margin: 10px 0 0;
+  font-size: 17px;
+  color: var(--accent);
+}
+
+.panel {
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--gap);
+}
+
+.panel-quiet {
+  background: transparent;
+}
+
+.panel-title {
+  margin: 0 0 6px;
+  font-size: var(--text-lg);
+}
+
+.panel-note,
+.empty-note {
+  margin: 0 0 12px;
+  color: var(--ink-soft);
+}
+
+.queue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.queue-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  flex-wrap: wrap;
+}
+
+.queue-number {
+  min-width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+
+.queue-icon {
+  font-size: 26px;
+}
+
+.queue-name {
+  flex: 1 1 140px;
+  display: flex;
+  flex-direction: column;
+}
+
+.queue-name small {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.pace-select {
+  font: inherit;
+  min-height: 52px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  padding: 6px 10px;
+}
+
+.icon-button {
+  min-height: 52px;
+  min-width: 52px;
+  padding: 6px 10px;
+  font-size: 18px;
+}
+
+.set-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.set-option {
+  min-width: var(--tap);
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.set-option.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.panel-start {
+  text-align: center;
+}
+
+.start {
+  width: 100%;
+  min-height: 88px;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.start-note {
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+}
+
+.library {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.game-card {
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.game-card-icon {
+  font-size: 30px;
+}
+
+.game-card-cat {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.game-card-blurb {
+  margin: 4px 0 10px;
+  font-size: 17px;
+  color: var(--ink-soft);
+  flex: 1;
+}
+
+.game-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.add {
+  flex: 1;
+  min-height: 56px;
+  background: var(--accent-soft);
+  border-color: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.secondary {
+  min-height: 56px;
+}
+
+.code-field {
+  font: inherit;
+  font-size: 15px;
+  width: 100%;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  resize: vertical;
+  -webkit-user-select: text;
+  user-select: text;
+  word-break: break-all;
+}
+
+.code-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.code-status {
+  margin: 8px 0 0;
+  color: var(--accent);
+  min-height: 1.4em;
+}
+
+/* -------------------------------------------------------------- session */
+
+.session {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+}
+
+.session-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gap);
+}
+
+.up-next,
+.all-done {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.up-next-icon,
+.all-done-icon {
+  font-size: 72px;
+}
+
+.up-next-name,
+.all-done-title {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.up-next-blurb,
+.all-done-note {
+  margin: 0;
+  max-width: 22ch;
+  color: var(--ink-soft);
+  font-size: var(--text-lg);
+}
+
+.break-note {
+  margin: 0 0 8px;
+  color: var(--warm);
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.countdown {
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.up-next-progress {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.skip {
+  margin-top: 8px;
+  min-width: 200px;
+}
+
+/* Leaving takes a deliberate hold, so a stray tap can never end a session. */
+.exit {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 56px;
+  min-height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink-soft);
+  opacity: 0.4;
+  overflow: hidden;
+}
+
+.exit-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent-soft);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.exit.is-holding .exit-fill {
+  transform: scaleX(1);
+  transition: transform 2s linear;
+}
+
+.exit-glyph {
+  position: relative;
+}
+
+/* ---------------------------------------------------------------- games */
+
+.game {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.game-prompt {
+  margin: 0;
+  font-size: var(--text-lg);
+  text-align: center;
+  max-width: 26ch;
+}
+
+.game-stage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  min-height: 300px;
+  justify-content: center;
+}
+
+.game-feedback {
+  height: 44px;
+  font-size: 38px;
+  line-height: 44px;
+}
+
+.game-feedback.is-right {
+  color: var(--accent);
+}
+
+.game-feedback.is-neutral {
+  color: var(--line);
+}
+
+.game-progress {
+  display: flex;
+  gap: 6px;
+}
+
+.pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.pip.is-done {
+  background: var(--accent);
+}
+
+.choice-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.choice {
+  flex: 1 1 160px;
+  max-width: 300px;
+  min-height: 84px;
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.choice-shape {
+  font-size: 44px;
+  flex: 0 0 auto;
+  min-width: 110px;
+}
+
+.choice.is-picked {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.card-face {
+  font-size: 140px;
+  line-height: 1;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  max-width: 460px;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.tile {
+  aspect-ratio: 1;
+  min-height: var(--tap);
+  border-radius: 14px;
+  background: var(--card);
+  display: grid;
+  place-items: center;
+  font-size: 40px;
+  padding: 0;
+}
+
+.tile-lg {
+  font-size: 0;
+  border-width: 4px;
+}
+
+.tile.is-lit {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.tile.is-picked {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.tile.is-gap {
+  background: var(--accent-soft);
+  border-style: dashed;
+  color: var(--accent);
+}
+
+.card.is-face-up {
+  background: var(--accent-soft);
+}
+
+.card.is-matched {
+  border-color: var(--accent);
+  opacity: 0.55;
+}
+
+.pattern {
+  max-width: 340px;
+}
+
+.shape-tile {
+  line-height: 1;
+}
+
+.panel-pair {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.compare-panel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 18px;
+  min-width: 180px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+}
+
+.panel-shape {
+  font-size: 46px;
+  text-align: center;
+}
+
+.stroop-word {
+  font-size: 62px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.flock {
+  display: flex;
+  gap: 10px;
+}
+
+.flock-arrow {
+  font-size: 52px;
+}
+
+.flock-arrow.is-centre {
+  font-size: 72px;
+}
+
+.cup-row {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  height: 150px;
+}
+
+.cup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 140px;
+  font-size: 64px;
+  padding: 0;
+  transition: transform 380ms ease-in-out;
+}
+
+.blob-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  min-height: 170px;
+}
+
+.blob {
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  min-height: 0;
+}
+
+.blob.is-picked {
+  outline: 5px solid var(--ink);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+  }
+}
