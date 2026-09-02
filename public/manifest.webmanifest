@@ -1,0 +1,16 @@
+{
+  "name": "Brain Rounds",
+  "short_name": "Brain Rounds",
+  "description": "A brain-training session that runs itself.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#f7f4ef",
+  "theme_color": "#2d7d6f",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
