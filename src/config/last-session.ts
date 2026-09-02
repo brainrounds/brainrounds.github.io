@@ -1,3 +1,5 @@
+import { getStorage } from './storage';
+
 const STORAGE_KEY = 'brain-rounds.last-session.v1';
 
 export interface LastSession {
@@ -13,17 +15,17 @@ export interface LastSession {
  * One record, not a history. It answers the only question the caregiver
  * actually has after leaving the room: did the session run?
  */
-export function saveLastSession(record: LastSession, store: Storage = localStorage): void {
+export function saveLastSession(record: LastSession, store = getStorage()): void {
   try {
-    store.setItem(STORAGE_KEY, JSON.stringify(record));
+    store?.setItem(STORAGE_KEY, JSON.stringify(record));
   } catch {
     // A missing record is cosmetic; never let it interrupt the app.
   }
 }
 
-export function loadLastSession(store: Storage = localStorage): LastSession | null {
+export function loadLastSession(store = getStorage()): LastSession | null {
   try {
-    const raw = store.getItem(STORAGE_KEY);
+    const raw = store?.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed: unknown = JSON.parse(raw);
     return isLastSession(parsed) ? parsed : null;

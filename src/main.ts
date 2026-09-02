@@ -21,9 +21,11 @@ function showSetup(host: HTMLElement): void {
     onPreview: (gameId: string, pace: Pace) =>
       void play(host, { version: 1, queue: [{ gameId, pace }], sets: 1 }, false),
   });
+  scrollToTop();
 }
 
 async function play(host: HTMLElement, config: Config, record: boolean): Promise<void> {
+  scrollToTop();
   const { summary, minutes } = await runSessionScreen(config, host);
   if (record) {
     saveLastSession({
@@ -35,6 +37,21 @@ async function play(host: HTMLElement, config: Config, record: boolean): Promise
     });
   }
   showSetup(host);
+}
+
+/**
+ * Go back to the top whenever the screen changes.
+ *
+ * The setup screen is long. Without this, scrolling down to the game list and
+ * tapping start leaves the game rendered above the scroll position — a blank
+ * screen with the session already running behind it.
+ */
+function scrollToTop(): void {
+  try {
+    window.scrollTo(0, 0);
+  } catch {
+    // Not worth failing a session over.
+  }
 }
 
 /**
