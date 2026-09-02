@@ -57,6 +57,11 @@ end itself.
 | C3 | An unknown game id is dropped; the rest of the queue is kept. | `config.test.ts` › "drops a game that no longer exists but keeps the rest of the queue" |
 | C4 | A missing set count falls back to the default, not to the minimum. | `config.test.ts` › "falls back to the default when there is no set count at all" |
 | C5 | A setup code round-trips a queue exactly, and an unrecognised code changes nothing. | `config.test.ts` › "setup code" |
+| C6 | A browser that refuses access to `localStorage` outright costs the saved setup, never the app. | `storage-blocked.test.ts` › "still renders the whole setup screen" |
+
+C6 exists because reading the `localStorage` property can itself throw, and a default
+argument is evaluated before the function body — so the guard has to live outside, in
+`getStorage()`. Observed rendering a completely blank app inside a sandboxed frame.
 
 C4 exists because `Number(null)` is `0`: coercing a missing value would quietly turn
 two sets into one.

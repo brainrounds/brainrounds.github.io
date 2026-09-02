@@ -309,8 +309,15 @@ button:focus-visible {
 
 .session {
   position: relative;
-  min-height: 100vh;
   display: flex;
+
+  min-height: 100vh;
+  /*
+   * `dvh` discounts the browser's own chrome on a phone, so the play area is
+   * the part actually on screen rather than the part hidden behind a URL bar.
+   * Declared second so browsers without it keep the line above.
+   */
+  min-height: 100dvh;
 }
 
 .session-stage {

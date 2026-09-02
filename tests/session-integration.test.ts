@@ -13,6 +13,16 @@ import { runSessionScreen } from '../src/session/session-view';
  */
 
 const MAX_VIRTUAL_MS = 90 * 60 * 1000;
+/** How much virtual time each turn of the clock advances. */
+const STEP_MS = 2000;
+/**
+ * Winding a whole session forward is thousands of timer callbacks and microtask
+ * flushes. That is fast, but it is still REAL work, and on a loaded machine it
+ * can outlast Vitest's 5-second default — which shows up as a flaky failure
+ * that has nothing to do with the code under test. The cap below is generous
+ * enough to absorb that while still catching a genuine hang.
+ */
+const REAL_TIME_BUDGET_MS = 60_000;
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -31,8 +41,8 @@ async function fastForward<T>(work: Promise<T>): Promise<T> {
     settled = true;
     return value;
   });
-  for (let elapsed = 0; !settled && elapsed < MAX_VIRTUAL_MS; elapsed += 500) {
-    await vi.advanceTimersByTimeAsync(500);
+  for (let elapsed = 0; !settled && elapsed < MAX_VIRTUAL_MS; elapsed += STEP_MS) {
+    await vi.advanceTimersByTimeAsync(STEP_MS);
   }
   expect(settled, 'the session never finished on its own').toBe(true);
   return tracked;
@@ -42,7 +52,7 @@ function config(queue: string[], sets: number): Config {
   return { version: 1, queue: queue.map((gameId) => ({ gameId, pace: 'brisk' as const })), sets };
 }
 
-describe('a session running unattended', () => {
+describe('a session running unattended', { timeout: REAL_TIME_BUDGET_MS }, () => {
   it('plays a queue through both sets with no input at all', async () => {
     const root = document.createElement('div');
     document.body.appendChild(root);

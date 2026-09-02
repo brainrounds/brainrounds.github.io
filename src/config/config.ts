@@ -1,4 +1,5 @@
 import { PACES, type Pace } from '../games/types';
+import { getStorage } from './storage';
 
 const STORAGE_KEY = 'brain-rounds.config.v1';
 
@@ -86,10 +87,10 @@ function toNumber(value: unknown): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-export function loadConfig(gameIds: readonly string[], store: Storage = localStorage): Config {
+export function loadConfig(gameIds: readonly string[], store = getStorage()): Config {
   let stored: string | null = null;
   try {
-    stored = store.getItem(STORAGE_KEY);
+    stored = store?.getItem(STORAGE_KEY) ?? null;
   } catch {
     return defaultConfig(gameIds); // private mode, or storage disabled
   }
@@ -101,9 +102,9 @@ export function loadConfig(gameIds: readonly string[], store: Storage = localSto
   return config;
 }
 
-export function saveConfig(config: Config, store: Storage = localStorage): void {
+export function saveConfig(config: Config, store = getStorage()): void {
   try {
-    store.setItem(STORAGE_KEY, JSON.stringify(config));
+    store?.setItem(STORAGE_KEY, JSON.stringify(config));
   } catch {
     // Nothing useful to do if storage is full or blocked; the session still runs.
   }

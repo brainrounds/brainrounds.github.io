@@ -79,6 +79,17 @@ fail. Do not weaken that.
   must track has to be animated, not reordered.
 - **`tapMany` blocks repeat taps by default.** Sequence games need
   `{ allowRepeats: true }`, or an answer like 1-3-1 can never be entered.
+- **NEVER touch `localStorage` directly — always go through `getStorage()` in
+  [src/config/storage.ts](src/config/storage.ts).** Reading the property itself throws in a
+  sandboxed frame or when the browser blocks site data, and a `store = localStorage`
+  default argument is evaluated *before* the function body, so a try/catch inside the
+  function cannot save you. Observed rendering a completely blank app.
+- **Winding a session forward on fake timers is real work.** The integration tests carry an
+  explicit timeout because Vitest's 5-second default is not enough on a loaded machine, and
+  the failure looks like a bug in the code rather than in the harness.
+- **ALWAYS scroll to the top when the screen changes.** The setup screen is far taller than
+  a phone; starting a session from the bottom of it used to render the game above the
+  scroll position, so the player saw a blank screen with a session already running.
 
 ## Documentation
 
