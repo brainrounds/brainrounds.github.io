@@ -17,7 +17,7 @@ Free, no account, no ads, nothing tracked, and it works with the internet off.
 
 Open it on the tablet:
 
-**<https://recess-screentime.github.io/brain-rounds/>**
+**<https://brainrounds.github.io/>**
 
 ### Put it on the home screen (Android)
 
