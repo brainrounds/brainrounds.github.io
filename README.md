@@ -17,7 +17,7 @@ Free, no account, no ads, nothing tracked, and it works with the internet off.
 
 Open it on the tablet:
 
-**<https://brainrounds.github.io/brain-rounds/>**
+**<https://recess-screentime.github.io/brain-rounds/>**
 
 ### Put it on the home screen (Android)
 
@@ -107,7 +107,12 @@ npm run build   # static site into dist/
 ```
 
 The build uses a relative base path, so `dist/` can be served from a domain root, a
-sub-path, or any plain static host.
+sub-path, or any plain static host. `node scripts/build-single-file.mjs` folds the build
+into one self-contained HTML file, for handing to someone who has nowhere to host it.
+
+The live site is the contents of `dist/` on the `gh-pages` branch. A GitHub Actions
+workflow for the same job is included in [.github/workflows/deploy.yml](.github/workflows/deploy.yml)
+if you would rather deploy that way.
 
 - [docs/session-contract.md](docs/session-contract.md) — the behaviour the app must never
   lose, and the test holding each rule in place.
