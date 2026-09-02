@@ -21,6 +21,15 @@ interface Game {
 | G3 | Every listener and timer a game creates is registered against `opts.signal`, so it cannot outlive the game. | `runner.test.ts` › "aborts the running game when the watchdog fires" |
 | G4 | Every game is playable with single taps only — no swipe, drag, double-tap or long-press. | Reviewed per game; enforced by only ever using `tapOne` / `tapMany` / `askButtons` |
 | G5 | Every game exposes a `PACE_TABLE` with an entry for all three paces. | `smoke.test.ts` › "has a pace entry for every game at every pace" |
+| G6 | Every game shows a real instruction, draws something into the stage, and offers at least two things to tap. | `game-rendering.test.ts` › "every game draws a playable screen" |
+| G7 | Movement the player has to follow is animated, not a silent DOM reorder. | `game-rendering.test.ts` › "visibly moves the cups instead of silently reordering identical ones" |
+
+**G6 and G7 exist because finishing is not the same as working.** Follow the Cup once
+passed every test in this suite while being completely unplayable: it "shuffled" by
+reordering identical cups in the DOM, so nothing appeared to move and there was no way to
+follow the ball — and it terminated perfectly every time. G6 was confirmed to bite by
+breaking a game so that it still ran and ended cleanly but drew nothing: that game's test
+failed while the other eleven stayed green.
 
 ## The session runner
 
