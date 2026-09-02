@@ -130,6 +130,28 @@ on a tap would strand the session, which is the single failure this app exists t
 
 ---
 
+## How it was made
+
+Built in [Omniscio](https://omniscio.com), start to finish — planned, written, tested and
+published there.
+
+Worth knowing what that does and doesn't mean here:
+
+- **The games are original implementations of well-known mechanics**, not copies of any
+  particular brain-training product. If someone is used to a specific version, these will
+  feel related rather than identical.
+- **A full session has been run end to end** in a browser at tablet and phone sizes, and it
+  played the whole queue through both sets on a single tap. 105 tests cover the game logic,
+  the queue, and the cases that would otherwise strand a session.
+- **Nobody has yet played it with a person who has dementia.** The paces, round counts and
+  wording are considered judgements, not findings. That is the part most worth telling me
+  about.
+
+If a game is too fast, too slow, or just doesn't land for the person you care for, open an
+issue and say so plainly. That feedback is more useful here than a bug report.
+
+---
+
 ## Licence
 
 MIT — see [LICENSE](LICENSE).
